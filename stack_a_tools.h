@@ -44,16 +44,37 @@ bool basicStackCmp(T& first, T& second)
     return true;
 }
 
-template <typename T>
+template<typename T>
+concept isBasicTypeOfElem = requires (T& t)
+{
+    { t.top() } -> std::convertible_to<unsigned char>;
+    { t.top() } -> std::convertible_to<char>;
+
+    { t.top() } -> std::convertible_to<unsigned int>;
+    { t.top() } -> std::convertible_to<int>;
+
+    { t.top() } -> std::convertible_to<long>;
+    { t.top() } -> std::convertible_to<unsigned long>;
+
+    { t.top() } -> std::convertible_to<long long>;
+    { t.top() } -> std::convertible_to<size_t>;
+
+    { t.top() } -> std::convertible_to<float>;
+    { t.top() } -> std::convertible_to<double>;
+    { t.top() } -> std::convertible_to<long double>;
+};
+
+template <isBasicTypeOfElem T>
 bool stackCmp(T& first, T& second) {
     if (first.size() != second.size())
         return false;
 
-    //const auto* m1 = &first.bottom();
-    //const auto* m2 = &second.bottom();
+    auto* tmp1 = &first.top();
+    const auto* m1 = tmp1 - (first.size() - 1); // bottom 1
 
-    const auto* m1 = (typeof(first.top())*) ((uintptr_t) &first.top() & ~(uintptr_t) (pow(2, first.size() + 1) - 1));
-    const auto* m2 = (typeof(first.top())*) ((uintptr_t) &second.top() & ~(uintptr_t) (pow(2, second.size() + 1) - 1));
+    auto* tmp2 = &second.top();
+    const auto* m2 = tmp2 - (second.size() - 1); // bottom 2
+
     const size_t n = first.size();
 
     for (size_t j = 0; j < n; ++j) {
@@ -65,21 +86,24 @@ bool stackCmp(T& first, T& second) {
     return true;
 }
 
-template <typename T>
+template <isBasicTypeOfElem T>
 bool constTime_stackCmp(T& first, T&second)
 {
     if (first.size() != second.size())
         return false;
 
-    //const auto* m1 = &first.bottom();
-    //const auto* m2 = &second.bottom();
+    auto* tmp1 = &first.top();
+    const auto* _m1 = tmp1 - (first.size() - 1);
+    const auto* m1 = reinterpret_cast<const unsigned char*>(_m1); // bottom 1
 
-    const auto* m1 = (typeof(first.top())*) ((uintptr_t) &first.top() & ~(uintptr_t) (pow(2, first.size() + 1) - 1));
-    const auto* m2 = (typeof(first.top())*) ((uintptr_t) &second.top() & ~(uintptr_t) (pow(2, second.size() + 1) - 1));
-    const size_t n = first.size();
+    auto* tmp2 = &second.top();
+    const auto* _m2 = tmp2 - (second.size() - 1);
+    const auto* m2 = reinterpret_cast<const unsigned char*>(_m2); // bottom 2
 
-    const auto* pm1 = m1 + n;
-    const auto* pm2 = m2 + n;
+    size_t n = first.size() * sizeof(first.top());
+
+    const auto *pm1 = m1 + n;
+    const auto *pm2 = m2 + n;
     int res = 0;
     if (n > 0) {
         do {

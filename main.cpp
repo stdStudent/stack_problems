@@ -55,23 +55,22 @@ int main()
     }
     timer.stop();*/
 
-    stack_a<int> stack_a_1, stack_a_2;
-    stack_a_1.push(1);
-    stack_a_1.push(2);
-    stack_a_1.push(4);
+    stack_a<float> stack_a_1, stack_a_2;
+    stack_a_1.push(1u);
+    stack_a_1.push(2u);
+    stack_a_1.push(4u);
 
     stack_a_2.push(1);
     stack_a_2.push(2);
     stack_a_2.push(4);
 
+    auto* p = &stack_a_2.top();
+    auto* p2 = p - 2;
+    std::cout << *p << " before " << *p2 << std::endl;
+
     //cout << basicStackCmp(stack_a_1, stack_a_2) << endl;
     cout << stackCmp(stack_a_1, stack_a_2) << endl;
     cout << constTime_stackCmp(stack_a_1, stack_a_2) << endl;
-    cout << &stack_a_2.bottom() << endl;
-    cout << &stack_a_2.top() << endl;
-    auto* tmp = (void*) ((uintptr_t) &stack_a_2.top() & ~(uintptr_t) (pow(2, stack_a_2.size() + 1) - 1));
-    cout << tmp << " " << pow(2, stack_a_2.size() + 1) - 1 << endl;
-
 
     return 0;
 }
