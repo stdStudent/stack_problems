@@ -49,7 +49,7 @@ bool stackCmp(T& first, T& second) {
         ++count;
     }
 
-    for (int i = v.size() - 1; i >= 0; --i) {
+    for (int i =v.size() - 1; i >= 0; --i) {
         first.push(v[i]);
         second.push(v[i]);
     }
