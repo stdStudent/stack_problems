@@ -56,9 +56,9 @@ int main()
     timer.stop();*/
 
     stack_a<float> stack_a_1, stack_a_2;
-    stack_a_1.push(1u);
-    stack_a_1.push(2u);
-    stack_a_1.push(4u);
+    stack_a_1.push(1);
+    stack_a_1.push(2);
+    stack_a_1.push(3);
 
     stack_a_2.push(1);
     stack_a_2.push(2);
