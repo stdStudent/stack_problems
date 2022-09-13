@@ -57,6 +57,75 @@ bool stackCmp(T& first, T& second) {
     return cmp;
 }
 
+template <typename T>
+bool isSubStack(T& stack, T& substack) {
+    // 14 6 9 34 6 1 2 3 4 5 6 9 34 5 1 2 3
+    //      9 34 5
+    if (stack.size() < substack.size())
+        return false;
+
+    bool result = false;
+    std::vector<typeof(stack.top())> s, ss;
+
+    while (stack.size() > substack.size()) {
+        if (stack.top() == substack.top()) {
+            s.push_back(stack.top());
+            stack.pop();
+
+            ss.push_back(substack.top());
+            substack.pop();
+
+            bool falseAlarm = false;
+            while (substack.size() != 0) {
+                if (stack.top() == substack.top()) {
+                    s.push_back(stack.top());
+                    stack.pop();
+                } else {
+                    for (int i = ss.size() - 1; i >= 0; --i)
+                        substack.push(ss[i]);
+                    falseAlarm = true;
+                    break;
+                }
+                ss.push_back(substack.top());
+                substack.pop();
+            }
+
+            if (!falseAlarm){
+                result = true;
+                break;
+            }
+        } else {
+            s.push_back(stack.top());
+            stack.pop();
+        }
+    }
+
+    for (int i = s.size() - 1; i >= 0; --i)
+        stack.push(s[i]);
+
+    for(int i = ss.size() - 1; i >= 0; --i)
+        substack.push(ss[i]);
+
+    return result;
+}
+
+template <typename T, typename U>
+void deleteCommonElems(T& stack, const U& elem)
+{
+    static_assert(std::same_as<typeof(stack.top()), U>);
+
+    std::vector<U> v;
+    while (stack.size() != 0) {
+        if (stack.top() != elem)
+            v.push_back(stack.top());
+
+        stack.pop();
+    }
+
+    for (int i = v.size() - 1; i >= 0; --i)
+        stack.push(v[i]);
+}
+
 template<typename T>
 concept isBasicTypeOfElem = requires (T& t) {
     { t.top() } -> std::convertible_to<unsigned char>;
@@ -131,5 +200,41 @@ bool stackByteByByteCmp(T& first, T&second)
         return false;
 }
 
+template <isBasicTypeOfElem T>
+bool isSubStackInside(T& stack, T& substack) {
+    auto* tmp1 = &stack.top();
+    const auto* A = tmp1 - (stack.size() - 1); // bottom 1
+
+    auto* tmp2 = &substack.top();
+    const auto* B = tmp2 - (substack.size() - 1); // bottom 2
+
+    // Two pointers to traverse the arrays
+    int i = 0, j = 0;
+
+    // Traverse both arrays simultaneously
+    while (i < stack.size() && j < substack.size()) {
+
+        // If element matches
+        // increment both pointers
+        if (A[i] == B[j]) {
+
+            i++;
+            j++;
+
+            // If array B is completely
+            // traversed
+            if (j == substack.size())
+                return true;
+        }
+            // If not,
+            // increment i and reset j
+        else {
+            i = i - j + 1;
+            j = 0;
+        }
+    }
+
+    return false;
+}
 
 #endif //_STACK_A_TOOLS_H
