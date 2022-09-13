@@ -55,14 +55,23 @@ int main()
     }
     timer.stop();*/
 
-    stack_a<float> stack_a_1, stack_a_2;
+    stack_a<int> stack_a_1, stack_a_2;
     stack_a_1.push(1);
+    stack_a_1.push(3);
+    stack_a_1.push(3);
+    stack_a_1.push(10);
+    stack_a_1.push(15);
+    stack_a_1.push(15);
     stack_a_1.push(2);
     stack_a_1.push(3);
 
     stack_a_2.push(1);
-    stack_a_2.push(2);
-    stack_a_2.push(4);
+    stack_a_2.push(1);
+    stack_a_2.push(3);
+    stack_a_2.push(1);
+    stack_a_2.push(10);
+    stack_a_2.push(15);
+    stack_a_2.push(1);
 
     auto* p = &stack_a_2.top();
     auto* p2 = p - 2;
@@ -71,6 +80,14 @@ int main()
     cout << stackCmp(stack_a_1, stack_a_2) << endl;
     cout << stackInsideCmp(stack_a_1, stack_a_2) << endl;
     cout << stackByteByByteCmp(stack_a_1, stack_a_2) << endl;
+
+    cout << isSubStack(stack_a_1, stack_a_2) << endl;
+    cout << isSubStackInside(stack_a_1, stack_a_2) << endl;
+
+    deleteCommonElems(stack_a_2, 1);
+
+    cout << isSubStack(stack_a_1, stack_a_2) << endl;
+    cout << isSubStackInside(stack_a_1, stack_a_2) << endl;
 
     return 0;
 }
