@@ -3,6 +3,9 @@
 
 #include <string>
 #include <cmath>
+#include <vector>
+
+#include "stack_a.h"
 
 using std::string;
 
@@ -26,27 +29,36 @@ void putToStack(T& dest, string&& str)
 }
 
 template <typename T>
-bool basicStackCmp(T& first, T& second)
-{
+bool stackCmp(T& first, T& second) {
     if (first.size() != second.size())
         return false;
 
-    T clone_first = first;
-    T clone_second = second;
+    bool cmp = true;
+    int count = 0;
+    std::vector<typeof(first.top())> v;
+    while (count < first.size() - 1) {
+        if (first.top() == second.top()) {
+            v.push_back(std::move(first.top()));
+            first.pop();
+            second.pop();
+        } else {
+            cmp = false;
+            break;
+        }
 
-    while (clone_first.size()) {
-        if (clone_first.top() == clone_second.top()) {
-            clone_first.pop();
-            clone_second.pop();
-        } else
-            return false;
+        ++count;
     }
-    return true;
+
+    for (int i = v.size() - 1; i >= 0; --i) {
+        first.push(v[i]);
+        second.push(v[i]);
+    }
+
+    return cmp;
 }
 
 template<typename T>
-concept isBasicTypeOfElem = requires (T& t)
-{
+concept isBasicTypeOfElem = requires (T& t) {
     { t.top() } -> std::convertible_to<unsigned char>;
     { t.top() } -> std::convertible_to<char>;
 
@@ -65,7 +77,8 @@ concept isBasicTypeOfElem = requires (T& t)
 };
 
 template <isBasicTypeOfElem T>
-bool stackCmp(T& first, T& second) {
+bool stackInsideCmp(T& first, T& second)
+{
     if (first.size() != second.size())
         return false;
 
@@ -87,7 +100,7 @@ bool stackCmp(T& first, T& second) {
 }
 
 template <isBasicTypeOfElem T>
-bool constTime_stackCmp(T& first, T&second)
+bool stackByteByByteCmp(T& first, T&second)
 {
     if (first.size() != second.size())
         return false;

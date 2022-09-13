@@ -7,24 +7,20 @@ using std::size_t;
 template <typename T>
 class stack_a {
     T* data;
-    size_t capacity, count;
+    size_t capacity{}, count{};
 
     void resize_if_need();
 
 public:
-    stack_a(size_t capacity = 50'000);
+    explicit stack_a(size_t capacity = 50'000);
     ~stack_a();
-
-    stack_a& operator=(const stack_a& copy);
-    stack_a& operator=(stack_a&& copy);
 
     void push(const T& elem);
     void push(T&& elem);
     void pop();
     T& top();
-    T& bottom();
     const T& top() const;
-    size_t size() const;
+    constexpr size_t size() const;
 };
 
 template <typename T>
@@ -90,13 +86,8 @@ const T& stack_a<T>::top() const {
 }
 
 template<typename T>
-size_t stack_a<T>::size() const {
+constexpr size_t stack_a<T>::size() const {
     return this->count;
-}
-
-template<typename T>
-T &stack_a<T>::bottom() {
-    return this->data[0];
 }
 
 #endif //_STACK_A_H
