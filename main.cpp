@@ -68,9 +68,9 @@ int main()
     auto* p2 = p - 2;
     std::cout << *p << " before " << *p2 << std::endl;
 
-    //cout << basicStackCmp(stack_a_1, stack_a_2) << endl;
     cout << stackCmp(stack_a_1, stack_a_2) << endl;
-    cout << constTime_stackCmp(stack_a_1, stack_a_2) << endl;
+    cout << stackInsideCmp(stack_a_1, stack_a_2) << endl;
+    cout << stackByteByByteCmp(stack_a_1, stack_a_2) << endl;
 
     return 0;
 }
