@@ -6,10 +6,12 @@
 #define enable_comptime
 
 #include "stack_a.h"
+#include "stack_l.h"
 #include "stack_tools.h"
 #include "stack_a_tools.h"
 #include "string_tools.h"
 #include "codeTimer.h"
+#include "aides.h"
 
 using std::string,
       std::cout,
@@ -59,7 +61,7 @@ int main()
     }
     timer.stop();*/
 
-    stack_a<int> stack_a_1, stack_a_2;
+    stack_l<float> stack_a_1, stack_a_2;
     stack_a_1.push(1);
     stack_a_1.push(3);
     stack_a_1.push(3);
@@ -68,30 +70,56 @@ int main()
     stack_a_1.push(15);
     stack_a_1.push(2);
     stack_a_1.push(3);
+    cout << stack_a_1.size() << endl;
 
     stack_a_2.push(1);
-    stack_a_2.push(1);
+    stack_a_2.push(0);
     stack_a_2.push(3);
-    stack_a_2.push(1);
-    stack_a_2.push(10);
-    stack_a_2.push(15);
-    stack_a_2.push(1);
+    //stack_a_2.push(1);
+    //stack_a_2.push(10);
+    //stack_a_2.push(15);
+    //stack_a_2.push(1);
 
     auto* p = &stack_a_2.top();
     auto* p2 = p - 2;
     std::cout << *p << " before " << *p2 << std::endl;
 
     cout << stackCmp(stack_a_1, stack_a_2) << endl;
-    cout << stackInsideCmp(stack_a_1, stack_a_2) << endl;
-    cout << stackByteByByteCmp(stack_a_1, stack_a_2) << endl;
+    //cout << stackInsideCmp(stack_a_1, stack_a_2) << " alt" << endl;
+    //cout << stackByteByByteCmp(stack_a_1, stack_a_2) << "alt" << endl;
 
     cout << isSubStack(stack_a_1, stack_a_2) << endl;
-    cout << isSubStackInside(stack_a_1, stack_a_2) << endl;
+    //cout << isSubStackInside(stack_a_1, stack_a_2) << " alt" << endl;
 
-    deleteCommonElems(stack_a_2, 1);
+    deleteCommonElems(stack_a_2, 1.0f);
 
     cout << isSubStack(stack_a_1, stack_a_2) << endl;
-    cout << isSubStackInside(stack_a_1, stack_a_2) << endl;
+    //cout << isSubStackInside(stack_a_1, stack_a_2) << "alt" << endl;
+    cout << typeid(stack_a_1).name() << endl;
+
+    sizeRestrictedVector<int> v(10);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+    v.push_back(123);
+    cout << v.size() << '[' << v.capacity() << ']' << endl;
+
 
     return 0;
 }

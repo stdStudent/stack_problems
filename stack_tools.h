@@ -10,20 +10,20 @@
 using std::string;
 
 template <typename T>
-comptime void putToStack(T& dest, string& str)
+comptime void putToStack(T& dest, string& str, const size_t limit = 0)
 {
-    if (str.length() > 1000)
-        str.resize(1000);
+    if (str.length() > limit && limit != 0)
+        str.resize(limit);
 
     dest.push(str);
 }
 
 /* move semantics */
 template <typename T>
-comptime void putToStack(T& dest, string&& str)
+comptime void putToStack(T& dest, string&& str, const size_t limit = 0)
 {
-    if (str.length() > 1000)
-        str.resize(1000);
+    if (str.length() > limit && limit != 0)
+        str.resize(limit);
 
     dest.push(str);
 }
@@ -33,11 +33,9 @@ comptime bool stackCmp(T& first, T& second) {
     if (first.size() != second.size())
         return false;
 
-    const size_t a = first.size();
-
     bool cmp = true;
     int count = 0;
-    std::vector<typeof(first.top())> v;
+    sizeRestrictedVector<typeof(first.top())> v(first.size());
 
     while (count < first.size() - 1) {
         if (first.top() == second.top()) {
@@ -68,7 +66,8 @@ comptime bool isSubStack(T& stack, T& substack) {
         return false;
 
     bool result = false;
-    std::vector<typeof(stack.top())> s, ss;
+    sizeRestrictedVector<typeof(stack.top())> s(stack.size()), ss(substack.size());
+    //std::vector<typeof(stack.top())> s, ss;
 
     while (stack.size() > substack.size()) {
         if (stack.top() == substack.top()) {
@@ -79,7 +78,7 @@ comptime bool isSubStack(T& stack, T& substack) {
             substack.pop();
 
             bool falseAlarm = false;
-            while (substack.size() != 0) {
+            while (substack.size() != 1) {
                 if (stack.top() == substack.top()) {
                     s.push_back(stack.top());
                     stack.pop();
@@ -117,7 +116,7 @@ comptime void deleteCommonElems(T& stack, const U& elem)
 {
     static_assert(std::same_as<typeof(stack.top()), U>);
 
-    std::vector<U> v;
+    sizeRestrictedVector<U> v(stack.size());
     while (stack.size() != 0) {
         if (stack.top() != elem)
             v.push_back(stack.top());

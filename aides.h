@@ -16,6 +16,7 @@
 #endif
 
 #include <iostream>
+#include <string>
 #include <limits>
 
 template <class T, size_t capacity_limit>
@@ -142,5 +143,125 @@ constexpr bool operator!= (const sizeRestrictedAlloc<T1, capacity_limit>&,
     return false;
 }
 
+template<typename T>
+class sizeRestrictedVector {
+private:
+    T* arr = nullptr;
+    size_t current_capacity;
+    size_t elems_cnt;
+    const size_t default_capacity = 2;
+    size_t max_capacity{};
+
+public:
+    explicit sizeRestrictedVector(size_t limit) {
+        arr = new T[default_capacity];
+        current_capacity = default_capacity;
+        max_capacity = limit;
+        elems_cnt = 0;
+    };
+
+    ~sizeRestrictedVector() {
+        delete[] arr;
+    }
+
+    void push_back(const T& data);
+    void push_back(T&& data);
+    void pop_back();
+
+    [[nodiscard]] constexpr bool empty() const;
+    [[nodiscard]] constexpr size_t size() const;
+    [[nodiscard]] constexpr size_t capacity() const;
+    T &operator[](size_t pos);
+};
+
+template<typename T>
+void sizeRestrictedVector<T>::push_back(const T &data) {
+    if (elems_cnt == max_capacity)
+        throw std::out_of_range("No more capacity reserved.");
+
+    if (elems_cnt < current_capacity) {
+        *(arr + elems_cnt) = data;
+        elems_cnt++;
+    } else {
+        size_t new_size;
+        if (current_capacity * 2 < max_capacity)
+            new_size = current_capacity * 2;
+        else
+            new_size = max_capacity;
+
+        auto tmp_arr = new T[new_size];
+        current_capacity = new_size;
+
+        for (int i = 0; i < elems_cnt; i++) {
+            tmp_arr[i] = arr[i];
+        }
+
+        delete[] arr;
+        arr = tmp_arr;
+
+        *(arr + elems_cnt) = data;
+        elems_cnt++;
+    }
+}
+
+template<typename T>
+void sizeRestrictedVector<T>::push_back(T&& data) {
+    if (elems_cnt == max_capacity)
+        throw std::out_of_range("No more capacity reserved.");
+
+    if (elems_cnt < current_capacity) {
+        *(arr + elems_cnt) = data;
+        elems_cnt++;
+    } else {
+        size_t new_size;
+        if (current_capacity * 2 < max_capacity)
+            new_size = current_capacity * 2;
+        else
+            new_size = max_capacity;
+
+        auto tmp_arr = new T[new_size];
+        current_capacity = new_size;
+
+        for (int i = 0; i < elems_cnt; i++) {
+            tmp_arr[i] = arr[i];
+        }
+
+        delete[] arr;
+        arr = tmp_arr;
+
+        *(arr + elems_cnt) = data;
+        elems_cnt++;
+    }
+}
+
+template<typename T>
+T &sizeRestrictedVector<T>::operator[](size_t pos) {
+    if (pos <= elems_cnt)
+        return *(this->arr + pos);
+    else
+        throw std::out_of_range("Out of bounds element access.");
+}
+
+template<typename T>
+constexpr size_t sizeRestrictedVector<T>::size() const {
+    return elems_cnt;
+}
+
+template<typename T>
+constexpr size_t sizeRestrictedVector<T>::capacity() const {
+    return current_capacity;
+}
+
+template<typename T>
+constexpr bool sizeRestrictedVector<T>::empty() const {
+    return elems_cnt == 0;
+}
+
+template<typename T>
+void sizeRestrictedVector<T>::pop_back() {
+    if (empty())
+        return;
+    elems_cnt--;
+}
 
 #endif //STACK_AIDES_H
