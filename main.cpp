@@ -2,7 +2,11 @@
 #include <string>
 #include <stack>
 
+
+#define enable_comptime
+
 #include "stack_a.h"
+#include "stack_tools.h"
 #include "stack_a_tools.h"
 #include "string_tools.h"
 #include "codeTimer.h"

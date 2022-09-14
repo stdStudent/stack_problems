@@ -20,7 +20,7 @@ public:
     void pop();
     T& top();
     const T& top() const;
-    constexpr size_t size() const;
+    [[nodiscard]] constexpr size_t size() const;
 };
 
 template <typename T>
