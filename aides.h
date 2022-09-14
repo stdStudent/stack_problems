@@ -71,7 +71,7 @@ public:
 
     // allocate but don't initialize num elements of type T
     nodiscard("sizeRestrictedAlloc") pointer allocate (size_type num, const void* hint = nullptr) {
-        static_assert(!(num > std::size_t(-1) / sizeof(T)));
+        //static_assert(!(num > std::size_t(-1) / sizeof(T)));
 
         pointer ret;
 
@@ -104,7 +104,7 @@ public:
     // deallocate storage p of deleted elements
     void deallocate (pointer p, size_type num)
     {
-        static_assert(!(num > std::size_t(-1) / sizeof(T)));
+        //static_assert(!(num > std::size_t(-1) / sizeof(T)));
 
         #if ((defined(_MSVC_LANG) && _MSVC_LANG < 201703L) || __cplusplus < 201703L)
 
