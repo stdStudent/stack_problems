@@ -83,7 +83,8 @@ comptime bool stackByteByByteCmp(T& first, T&second)
 }
 
 template <isBasicTypeOfElem T>
-comptime bool isSubStackInside(T& stack, T& substack) {
+comptime bool isSubStackInside(T& stack, T& substack)
+{
     auto* tmp1 = &stack.top();
     const auto* A = tmp1 - (stack.size() - 1); // bottom 1
 

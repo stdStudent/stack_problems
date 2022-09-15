@@ -5,7 +5,7 @@
 #include <string>
 #include <utility>
 
-template<class Resolution = std::chrono::milliseconds>
+template<class T = std::chrono::milliseconds>
 class codeTimer {
 
 private:
@@ -30,11 +30,12 @@ public:
         mStart = clock::now();
     }
 
-    void stop() {
+    void stop()
+    {
         mEnd = clock::now();
         std::cout << (!msg.empty() ? ("[" + msg + "] ") : "")
                   << "Time elapsed: "
-                  << std::chrono::duration_cast<Resolution>(mEnd - mStart).count()
+                  << std::chrono::duration_cast<T>(mEnd - mStart).count()
                   << std::endl;
     }
 };

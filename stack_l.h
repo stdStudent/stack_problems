@@ -5,6 +5,97 @@ using std::size_t;
 #ifndef STACK_STACK_L_H
 #define STACK_STACK_L_H
 
+/* Simple list-based stack */
+template <typename T>
+struct cNode {
+    T data;
+    cNode* next;
+};
+
+template <typename T>
+class cStack_l {
+private:
+    cNode<T>* top_elem;
+    size_t count;
+
+public:
+    cStack_l();
+    ~cStack_l();
+
+    void push(const T& elem);
+    void push(T&& elem);
+    void pop();
+    T& top();
+    const T& top() const;
+    constexpr size_t size();
+};
+
+template<typename T>
+cStack_l<T>::cStack_l() {
+    top_elem = nullptr;
+    count = 0;
+}
+
+template<typename T>
+cStack_l<T>::~cStack_l() {
+    while (top_elem != nullptr)
+        pop();
+
+    //delete this;
+}
+
+template<typename T>
+void cStack_l<T>::push(const T &elem) {
+    auto* n = new cNode<T>;
+    n->data = elem;
+    n->next = top_elem;
+    top_elem = n;
+    ++count;
+}
+
+template<typename T>
+void cStack_l<T>::push(T &&elem) {
+    auto* n = new cNode<T>;
+    n->data = elem;
+    n->next = top_elem;
+    top_elem = n;
+    ++count;
+}
+
+template<typename T>
+void cStack_l<T>::pop() {
+    if (top_elem != nullptr) {
+        auto* n = top_elem;
+        top_elem = top_elem->next;
+        delete n;
+        --count;
+    } else
+        throw std::out_of_range("The stack is empty.");
+}
+
+template<typename T>
+T &cStack_l<T>::top() {
+    if (top_elem != nullptr)
+        return top_elem->data;
+    else
+        throw std::out_of_range("The stack is empty.");
+}
+
+template<typename T>
+const T &cStack_l<T>::top() const {
+    if (top_elem != nullptr)
+        return top_elem->data;
+    else
+        throw std::out_of_range("The stack is empty.");
+}
+
+template<typename T>
+constexpr size_t cStack_l<T>::size() {
+    return count;
+}
+
+
+/* С++17 list-based stack */
 template <typename T>
 struct node {
     T data;
@@ -27,7 +118,7 @@ public:
     void pop();
     T& top();
     const T& top() const;
-    size_t size();
+    constexpr size_t size();
 };
 
 template <typename T>
@@ -79,7 +170,7 @@ const T& stack_l<T>::top() const {
 }
 
 template <typename T>
-size_t stack_l<T>::size() {
+constexpr size_t stack_l<T>::size() {
     return this->count;
 }
 

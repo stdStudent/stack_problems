@@ -167,6 +167,7 @@ public:
     void push_back(const T& data);
     void push_back(T&& data);
     void pop_back();
+    void clear();
 
     [[nodiscard]] constexpr bool empty() const;
     [[nodiscard]] constexpr size_t size() const;
@@ -262,6 +263,12 @@ void sizeRestrictedVector<T>::pop_back() {
     if (empty())
         return;
     elems_cnt--;
+}
+
+template<typename T>
+void sizeRestrictedVector<T>::clear() {
+    while (elems_cnt != 0)
+        this->pop_back();
 }
 
 #endif //STACK_AIDES_H

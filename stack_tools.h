@@ -79,13 +79,14 @@ comptime bool isSubStack(T& stack, T& substack) {
             substack.pop();
 
             bool falseAlarm = false;
-            while (substack.size() != 1) {
+            while (substack.size() != 0) {
                 if (stack.top() == substack.top()) {
                     s.push_back(stack.top());
                     stack.pop();
                 } else {
                     for (int i = ss.size() - 1; i >= 0; --i)
                         substack.push(ss[i]);
+                    ss.clear(); // max capacity restricted to substack.size()
                     falseAlarm = true;
                     break;
                 }
