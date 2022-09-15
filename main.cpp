@@ -89,27 +89,38 @@ void time_test(const size_t numOfElems) {
 }
 
 void commonStack_test() {
-    stack_a<const char*> stack_a_1, stack_a_2;
+    std::stack<const char*> stack_a_1, stack_a_2;
+//    stack_a_1.push("0");
+//    stack_a_1.push("3");
+//    stack_a_1.push("10");
+//    stack_a_1.push("15");
+//    stack_a_1.push("15");
+//    stack_a_1.push("15");
+//    stack_a_1.push("15");
+//    stack_a_1.push("15");
+//    stack_a_1.push("15");
+//    stack_a_1.push("15");
+//    stack_a_1.push("2");
+//    stack_a_1.push("3");
+//
+//    stack_a_2.push("1");
+//    stack_a_2.push("0");
+//    stack_a_2.push("3");
+//    stack_a_2.push("1");
+//    stack_a_2.push("10");
+//    stack_a_2.push("15");
+//    stack_a_2.push("1");
+
     stack_a_1.push("0");
-    stack_a_1.push("3");
-    stack_a_1.push("10");
-    stack_a_1.push("15");
-    stack_a_1.push("15");
-    stack_a_1.push("15");
-    stack_a_1.push("15");
-    stack_a_1.push("15");
-    stack_a_1.push("15");
-    stack_a_1.push("15");
     stack_a_1.push("2");
     stack_a_1.push("3");
 
     stack_a_2.push("1");
-    stack_a_2.push("0");
+    stack_a_2.push("2");
     stack_a_2.push("3");
-    stack_a_2.push("1");
-    stack_a_2.push("10");
-    stack_a_2.push("15");
-    stack_a_2.push("1");
+
+
+
 
     cout << "stackCmp():\t\t" << (stackCmp(stack_a_1, stack_a_2) ? "true" : "false")  << endl;
     cout << "isSubStack:\t\t" << (isSubStack(stack_a_1, stack_a_2) ? "true" : "false") << endl;
@@ -144,9 +155,9 @@ int main()
 {
     //time_test<std::chrono::microseconds>(3000);
 
-    //commonStack_test();
+    commonStack_test();
 
-    arrayBasedStack_test();
+    //arrayBasedStack_test();
 
     return 0;
 }

@@ -37,7 +37,7 @@ comptime bool stackCmp(T& first, T& second) {
     int count = 0;
     sizeRestrictedVector<typeof(first.top())> v(first.size());
 
-    size_t size = first.size() - 1;
+    size_t size = first.size();
     while (count < size) {
         if (first.top() == second.top()) {
             v.push_back(std::move(first.top()));
