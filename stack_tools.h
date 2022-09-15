@@ -37,7 +37,8 @@ comptime bool stackCmp(T& first, T& second) {
     int count = 0;
     sizeRestrictedVector<typeof(first.top())> v(first.size());
 
-    while (count < first.size() - 1) {
+    size_t size = first.size() - 1;
+    while (count < size) {
         if (first.top() == second.top()) {
             v.push_back(std::move(first.top()));
             first.pop();
@@ -69,7 +70,7 @@ comptime bool isSubStack(T& stack, T& substack) {
     sizeRestrictedVector<typeof(stack.top())> s(stack.size()), ss(substack.size());
     //std::vector<typeof(stack.top())> s, ss;
 
-    while (stack.size() > substack.size()) {
+    while (stack.size() >= substack.size()) {
         if (stack.top() == substack.top()) {
             s.push_back(stack.top());
             stack.pop();
