@@ -11,6 +11,7 @@
 #include "stack_a_tools.h"
 #include "string_tools.h"
 #include "codeTimer.h"
+#include "parenthesis.h"
 
 using std::string,
       std::cout,
@@ -175,12 +176,14 @@ void arrayBasedStack_test() {
 int main()
 {
     //time_test<std::chrono::milliseconds>(1'000'000);
-
     //commonStack_test();
-
-    test_sort();
-
+    //test_sort();
     //arrayBasedStack_test();
+
+
+    cout << (checkPars<std::stack<char>>("{[[]{}]}()()") ? "true" : "false") << endl;
+    cout << (checkPars<std::stack<char>>("{[[]{}]}()()") ? "true" : "false") << endl;
+    cout << getIndexAtWrongPar<std::stack<char>>("{[[]{}]}()()") << endl;
 
     return 0;
 }
