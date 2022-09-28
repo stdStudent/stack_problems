@@ -28,8 +28,8 @@ comptime void putToStack(T& dest, string&& str, const size_t limit = 0)
     dest.push(str);
 }
 
-template <typename T>
-comptime bool stackCmp(T& first, T& second) {
+template <typename STACK>
+comptime bool stackCmp(STACK& first, STACK& second) {
     if (first.size() != second.size())
         return false;
 
@@ -128,6 +128,98 @@ comptime void deleteCommonElems(T& stack, const U& elem)
 
     for (int i = v.size() - 1; i >= 0; --i)
         stack.push(v[i]);
+}
+
+template <class Stack>
+void sortStack(Stack& orig_stack)
+{
+    Stack helper_stack;
+    while (orig_stack.size() != 0) {
+        auto element = orig_stack.top();
+        orig_stack.pop();
+
+        while (helper_stack.size() != 0 && helper_stack.top() > element) {
+            orig_stack.push(helper_stack.top());
+            helper_stack.pop();
+        }
+
+        helper_stack.push(element);
+    }
+
+    while (helper_stack.size() != 0) {
+        orig_stack.push(helper_stack.top());
+        helper_stack.pop();
+    }
+}
+
+template <class Stack>
+void insert_at_bottom(Stack& st, decltype(st.top()) x)
+{
+    if (st.size() == 0)
+        st.push(x);
+    else {
+        auto a = st.top();
+        st.pop();
+        insert_at_bottom(st, x);
+        st.push(a);
+    }
+}
+
+template <class Stack>
+void reverseStack(Stack& st) // O(n)
+{
+    if (st.size() > 0) {
+        auto x = st.top();
+        st.pop();
+        reverseStack(st);
+        insert_at_bottom(st, x);
+    }
+}
+
+template <class Stack>
+void mergeSortStack(Stack& stack) // O(n log[n])
+{
+    if (stack.size() == 1)
+        return;
+
+    Stack s1, s2;
+
+    while (s1.size() < stack.size()) {
+        s1.push(stack.top());
+        stack.pop();
+    }
+
+    while (stack.size() != 0) {
+        s2.push(stack.top());
+        stack.pop();
+    }
+
+    mergeSortStack(s1); // first half of the stack
+    mergeSortStack(s2); // second half --||--||--
+
+    reverseStack(s1);
+    reverseStack(s2);
+
+    /* Now head of s1 (and s2) is the smallest one. */
+    while (s1.size() != 0 && s2.size() != 0)
+        if (s1.top() < s2.top()) {
+            stack.push(s1.top());
+            s1.pop();
+        } else {
+            stack.push(s2.top());
+            s2.pop();
+        }
+
+    /* The tail. */
+    while (s1.size() != 0) {
+        stack.push(s1.top());
+        s1.pop();
+    }
+
+    while (s2.size() != 0) {
+        stack.push(s2.top());
+        s2.pop();
+    }
 }
 
 #endif //STACK_STACK_TOOLS_H

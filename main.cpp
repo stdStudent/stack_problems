@@ -29,6 +29,7 @@ void time_test(const size_t numOfElems) {
     putToStack(a_stack, test_str);
     cout << "Random string: " << a_stack.top() << endl;
 
+
     codeTimer<T> timer;
 
     timer.start("std_stack");
@@ -89,7 +90,7 @@ void time_test(const size_t numOfElems) {
 }
 
 void commonStack_test() {
-    std::stack<const char*> stack_a_1, stack_a_2;
+    stack_a<std::string> stack_a_1, stack_a_2;
 //    stack_a_1.push("0");
 //    stack_a_1.push("3");
 //    stack_a_1.push("10");
@@ -125,11 +126,31 @@ void commonStack_test() {
     cout << "stackCmp():\t\t" << (stackCmp(stack_a_1, stack_a_2) ? "true" : "false")  << endl;
     cout << "isSubStack:\t\t" << (isSubStack(stack_a_1, stack_a_2) ? "true" : "false") << endl;
 
-    //std::string s = "1";
-    const char* s = "1";
+    std::string s = "1";
+    //const char* s = "1";
     deleteCommonElems(stack_a_2, s);
     cout << "isSubStack:\t\t" << (isSubStack(stack_a_1, stack_a_2) ? "true" : "false")
          << " (after deleteCommonElems())" << endl;
+}
+
+void test_sort() {
+    std::stack<std::string> astack;
+
+    astack.push("4");
+    astack.push("1");
+    astack.push("1");
+    astack.push("3");
+
+    mergeSortStack(astack);
+    reverseStack(astack);
+
+    std::cout << astack.top();
+    astack.pop();
+    std::cout << astack.top();
+    astack.pop();
+    std::cout << astack.top();
+    astack.pop();
+    std::cout << astack.top();
 }
 
 void arrayBasedStack_test() {
@@ -153,9 +174,11 @@ void arrayBasedStack_test() {
 
 int main()
 {
-    //time_test<std::chrono::microseconds>(3000);
+    //time_test<std::chrono::milliseconds>(1'000'000);
 
-    commonStack_test();
+    //commonStack_test();
+
+    test_sort();
 
     //arrayBasedStack_test();
 

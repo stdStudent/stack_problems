@@ -91,27 +91,21 @@ comptime bool isSubStackInside(T& stack, T& substack)
     auto* tmp2 = &substack.top();
     const auto* B = tmp2 - (substack.size() - 1); // bottom 2
 
-    // Two pointers to traverse the arrays
+    /* Two pointers to traverse the arrays */
     int i = 0, j = 0;
 
-    // Traverse both arrays simultaneously
+    /* Traverse both arrays simultaneously */
     while (i < stack.size() && j < substack.size()) {
-
-        // If element matches
-        // increment both pointers
+        // if element matches, increment both pointers
         if (A[i] == B[j]) {
 
             i++;
             j++;
 
-            // If array B is completely
-            // traversed
+            // if array B is completely traversed
             if (j == substack.size())
                 return true;
-        }
-            // If not,
-            // increment i and reset j
-        else {
+        } else { // if not, increment i and reset j
             i = i - j + 1;
             j = 0;
         }
