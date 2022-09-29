@@ -31,21 +31,18 @@ public:
     ~gen_graph() {
         if (_graph != nullptr) {
             for (int i = 0; i < v_nr; i++) {
-                delete [] _graph[i];
-                _graph[i] = nullptr;
+                delete[] _graph[i];
             }
-            delete [] _graph;
-            _graph = nullptr;
+            delete[] _graph;
         }
     }
 
-    int get_e_nr() { return e_nr; }
+    [[nodiscard]] int get_e_nr() const { return e_nr; }
 
     bool del(int a, int b) {
         if (a < 0 || b < 0 || a >= v_nr || b >= v_nr) {
             return false;
-        }
-        else {
+        } else {
             _graph[a][b] = 0;
             _graph[b][a] = 0;
             return true;
@@ -55,8 +52,7 @@ public:
     bool is_edge(int a, int b) {
         if (_graph[a][b] == 1) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -116,7 +112,7 @@ public:
 
 class Eulerian_cycle {
     int** _graph;
-    int v_nr, e_nr;
+    int v_nr, e_nr{};
     float sat;
     std::vector<int> seq;
 
@@ -137,19 +133,16 @@ public:
     ~Eulerian_cycle() {
         if (_graph != nullptr) {
             for (int i = 0; i < v_nr; i++) {
-                delete [] _graph[i];
-                _graph[i] = nullptr;
+                delete[] _graph[i];
             }
-            delete [] _graph;
-            _graph = nullptr;
+            delete[] _graph;
         }
     }
 
     bool is_edge(int a, int b) {
         if (_graph[a][b] == 1) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -157,8 +150,7 @@ public:
     bool add(int a, int b) {
         if (a < 0 || b < 0 || a >= v_nr || b >= v_nr) {
             return false;
-        }
-        else {
+        } else {
             _graph[a][b] = 1;
             _graph[b][a] = 1;
             return true;
@@ -175,15 +167,16 @@ public:
     }
 
     void load() {
-        gen_graph* gen = new gen_graph(v_nr, sat);
+        auto* gen = new gen_graph(v_nr, sat);
         bool tmp_bool;
         tmp_bool = gen->euler_generate();
+
         while (!tmp_bool) {
             delete gen;
-            gen = nullptr;
             gen = new gen_graph(v_nr, sat);
             tmp_bool = gen->euler_generate();
         }
+
         for (int i = 0; i < v_nr; i++) {
             for (int j = 0; j < v_nr; j++) {
                 if (gen->is_edge(i, j)) {
@@ -191,28 +184,9 @@ public:
                 }
             }
         }
+
         e_nr = gen->get_e_nr();
         delete gen;
-        gen = nullptr;
-    }
-
-
-    bool are_adjecent(int a) {
-        for (int i = 0; i < v_nr; i++) {
-            if (is_edge(a, i)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    int first_adjecent(int a) {
-        for (int i = 0; i < v_nr; i++) {
-            if (_graph[a][i] == 1) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     bool del_edge(int a, int b) {
@@ -227,30 +201,6 @@ public:
         _graph[a][b] = 0;
         _graph[b][a] = 0;
         return true;
-    }
-
-    double perform() {
-        clock_t begin, end;
-        begin = clock();
-        std::stack<int> util_stack;
-        int v = 0;
-        int u;
-        util_stack.push(v);
-        while (!util_stack.empty()) {
-            v = util_stack.top();
-            if (are_adjecent(v)) {
-                u = first_adjecent(v);
-                util_stack.push(u);
-                del_edge(u, v);
-                v = u;
-            }
-            else {
-                util_stack.pop();
-                seq.push_back(v);
-            }
-        }
-        end = clock();
-        return double (end - begin) / CLOCKS_PER_SEC;
     }
 };
 

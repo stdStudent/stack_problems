@@ -181,7 +181,9 @@ void testPars() {
 }
 
 void testGraphs() {
-    Eulerian_cycle e(100, 0.9);
+    srand(time(0));
+
+    Eulerian_cycle e(10, 0.9);
     e.load();
     e.display();
 }
