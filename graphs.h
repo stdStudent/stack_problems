@@ -112,7 +112,12 @@ public:
             triangle[0] = rand() % v_nr;
             triangle[1] = rand() % v_nr;
             triangle[2] = rand() % v_nr;
-            while (!is_edge(triangle[0], triangle[1]) || !is_edge(triangle[1], triangle[2]) || !is_edge(triangle[2], triangle[0]) || triangle[0] == triangle[1] || triangle[1] == triangle[2] || triangle[2] == triangle[0]) {
+            while (!is_edge(triangle[0], triangle[1])
+                   || !is_edge(triangle[1], triangle[2])
+                   || !is_edge(triangle[2], triangle[0])
+                   || triangle[0] == triangle[1]
+                   || triangle[1] == triangle[2]
+                   || triangle[2] == triangle[0]) {
                 triangle[odd_counter % 3] = rand() % v_nr;
                 odd_counter++;
             }
