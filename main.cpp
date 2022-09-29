@@ -12,6 +12,7 @@
 #include "string_tools.h"
 #include "codeTimer.h"
 #include "parenthesis.h"
+#include "graphs.h"
 
 using std::string,
       std::cout,
@@ -173,17 +174,27 @@ void arrayBasedStack_test() {
          << " (after deleteCommonElems())" << endl;
 }
 
+void testPars() {
+    cout << (checkPars<std::stack<char>>("{[[]{}]}()()") ? "true" : "false") << endl;
+    cout << (checkPars<std::stack<char>>("{[[]{}]}()()") ? "true" : "false") << endl;
+    cout << getIndexAtWrongPar<std::stack<char>>("{[[]{}]}()()") << endl;
+}
+
+void testGraphs() {
+    Eulerian_cycle e(100, 0.9);
+    e.load();
+    e.display();
+}
+
 int main()
 {
     //time_test<std::chrono::milliseconds>(1'000'000);
     //commonStack_test();
     //test_sort();
     //arrayBasedStack_test();
+    //testPars();
 
-
-    cout << (checkPars<std::stack<char>>("{[[]{}]}()()") ? "true" : "false") << endl;
-    cout << (checkPars<std::stack<char>>("{[[]{}]}()()") ? "true" : "false") << endl;
-    cout << getIndexAtWrongPar<std::stack<char>>("{[[]{}]}()()") << endl;
+    testGraphs();
 
     return 0;
 }
