@@ -29,13 +29,13 @@ public:
     }
 
     ~gen_graph() {
-        if (_graph != NULL) {
+        if (_graph != nullptr) {
             for (int i = 0; i < v_nr; i++) {
                 delete [] _graph[i];
-                _graph[i] = NULL;
+                _graph[i] = nullptr;
             }
             delete [] _graph;
-            _graph = NULL;
+            _graph = nullptr;
         }
     }
 
@@ -135,13 +135,13 @@ public:
 
 
     ~Eulerian_cycle() {
-        if (_graph != NULL) {
+        if (_graph != nullptr) {
             for (int i = 0; i < v_nr; i++) {
                 delete [] _graph[i];
-                _graph[i] = NULL;
+                _graph[i] = nullptr;
             }
             delete [] _graph;
-            _graph = NULL;
+            _graph = nullptr;
         }
     }
 
@@ -180,7 +180,7 @@ public:
         tmp_bool = gen->euler_generate();
         while (!tmp_bool) {
             delete gen;
-            gen = NULL;
+            gen = nullptr;
             gen = new gen_graph(v_nr, sat);
             tmp_bool = gen->euler_generate();
         }
@@ -193,7 +193,7 @@ public:
         }
         e_nr = gen->get_e_nr();
         delete gen;
-        gen = NULL;
+        gen = nullptr;
     }
 
 
