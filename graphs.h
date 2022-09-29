@@ -17,43 +17,43 @@ class gen_graph {
     int** _graph;
 public:
     gen_graph(int m, float saturation) {
-        this->v_nr = m;
-        this->e_nr = round(saturation * this->v_nr * (this->v_nr - 1) / 2);
-        this->_graph = new int * [this->v_nr];
-        for (int i = 0; i < this->v_nr; i++) {
-            this->_graph[i] = new int [this->v_nr];
-            for (int j = 0; j < this->v_nr; j++) {
-                this->_graph[i][j] = 0;
+        v_nr = m;
+        e_nr = round(saturation * v_nr * (v_nr - 1) / 2);
+        _graph = new int * [v_nr];
+        for (int i = 0; i < v_nr; i++) {
+            _graph[i] = new int [v_nr];
+            for (int j = 0; j < v_nr; j++) {
+                _graph[i][j] = 0;
             }
         }
     }
 
     ~gen_graph() {
-        if (this->_graph != NULL) {
-            for (int i = 0; i < this->v_nr; i++) {
-                delete [] this->_graph[i];
-                this->_graph[i] = NULL;
+        if (_graph != NULL) {
+            for (int i = 0; i < v_nr; i++) {
+                delete [] _graph[i];
+                _graph[i] = NULL;
             }
-            delete [] this->_graph;
-            this->_graph = NULL;
+            delete [] _graph;
+            _graph = NULL;
         }
     }
 
     int get_e_nr() { return e_nr; }
 
     bool del(int a, int b) {
-        if (a < 0 || b < 0 || a >= this->v_nr || b >= this->v_nr) {
+        if (a < 0 || b < 0 || a >= v_nr || b >= v_nr) {
             return false;
         }
         else {
-            this->_graph[a][b] = 0;
-            this->_graph[b][a] = 0;
+            _graph[a][b] = 0;
+            _graph[b][a] = 0;
             return true;
         }
     }
 
     bool is_edge(int a, int b) {
-        if (this->_graph[a][b] == 1) {
+        if (_graph[a][b] == 1) {
             return true;
         }
         else {
@@ -63,9 +63,9 @@ public:
 
     bool is_eulerian() {
         int odd_counter = 0;
-        for (int i = 0; i < this->v_nr; i++) {
-            for (int j = 0; j < this->v_nr; j++) {
-                if (this->_graph[i][j] == 1) {
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
+                if (_graph[i][j] == 1) {
                     odd_counter++;
                 }
             }
@@ -79,37 +79,37 @@ public:
 
 
     bool euler_generate() {
-        for (int i = 0; i < this->v_nr; i++) {
-            for (int j = 0; j < this->v_nr; j++) {
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
                 if (i == j) {
                     continue;
                 }
-                this->_graph[i][j] = 1;
+                _graph[i][j] = 1;
             }
         }
-        int edge_count = this->v_nr * (this->v_nr - 1) / 2;
-        if (this->v_nr % 2 == 0) {
-            for (int i = this->v_nr - 1; i >= 0; i--) {
-                this->del(i, this->v_nr - 1 - i);
+        int edge_count = v_nr * (v_nr - 1) / 2;
+        if (v_nr % 2 == 0) {
+            for (int i = v_nr - 1; i >= 0; i--) {
+                del(i, v_nr - 1 - i);
             }
-            edge_count = this->v_nr * (this->v_nr - 2) / 2;
+            edge_count = v_nr * (v_nr - 2) / 2;
         }
         int triangle[3];
         int odd_counter = 0;
-        while (edge_count - this->e_nr >= 2) {
-            triangle[0] = rand() % this->v_nr;
-            triangle[1] = rand() % this->v_nr;
-            triangle[2] = rand() % this->v_nr;
-            while (!this->is_edge(triangle[0], triangle[1]) || !this->is_edge(triangle[1], triangle[2]) || !this->is_edge(triangle[2], triangle[0]) || triangle[0] == triangle[1] || triangle[1] == triangle[2] || triangle[2] == triangle[0]) {
-                triangle[odd_counter % 3] = rand() % this->v_nr;
+        while (edge_count - e_nr >= 2) {
+            triangle[0] = rand() % v_nr;
+            triangle[1] = rand() % v_nr;
+            triangle[2] = rand() % v_nr;
+            while (!is_edge(triangle[0], triangle[1]) || !is_edge(triangle[1], triangle[2]) || !is_edge(triangle[2], triangle[0]) || triangle[0] == triangle[1] || triangle[1] == triangle[2] || triangle[2] == triangle[0]) {
+                triangle[odd_counter % 3] = rand() % v_nr;
                 odd_counter++;
             }
-            this->del(triangle[0], triangle[1]);
-            this->del(triangle[1], triangle[2]);
-            this->del(triangle[2], triangle[0]);
+            del(triangle[0], triangle[1]);
+            del(triangle[1], triangle[2]);
+            del(triangle[2], triangle[0]);
             edge_count -= 3;
         }
-        return this->is_eulerian();
+        return is_eulerian();
     }
 
 };
@@ -122,31 +122,31 @@ class Eulerian_cycle {
 
 public:
     Eulerian_cycle(int m, float saturation) {
-        this->v_nr = m;
-        this->sat = saturation;
-        this->_graph = new int * [this->v_nr];
-        for (int i = 0; i < this->v_nr; i++) {
-            this->_graph[i] = new int [this->v_nr];
-            for (int j = 0; j < this->v_nr; j++) {
-                this->_graph[i][j] = 0;
+        v_nr = m;
+        sat = saturation;
+        _graph = new int * [v_nr];
+        for (int i = 0; i < v_nr; i++) {
+            _graph[i] = new int [v_nr];
+            for (int j = 0; j < v_nr; j++) {
+                _graph[i][j] = 0;
             }
         }
     }
 
 
     ~Eulerian_cycle() {
-        if (this->_graph != NULL) {
-            for (int i = 0; i < this->v_nr; i++) {
-                delete [] this->_graph[i];
-                this->_graph[i] = NULL;
+        if (_graph != NULL) {
+            for (int i = 0; i < v_nr; i++) {
+                delete [] _graph[i];
+                _graph[i] = NULL;
             }
-            delete [] this->_graph;
-            this->_graph = NULL;
+            delete [] _graph;
+            _graph = NULL;
         }
     }
 
     bool is_edge(int a, int b) {
-        if (this->_graph[a][b] == 1) {
+        if (_graph[a][b] == 1) {
             return true;
         }
         else {
@@ -155,51 +155,51 @@ public:
     }
 
     bool add(int a, int b) {
-        if (a < 0 || b < 0 || a >= this->v_nr || b >= this->v_nr) {
+        if (a < 0 || b < 0 || a >= v_nr || b >= v_nr) {
             return false;
         }
         else {
-            this->_graph[a][b] = 1;
-            this->_graph[b][a] = 1;
+            _graph[a][b] = 1;
+            _graph[b][a] = 1;
             return true;
         }
     }
 
     void display() {
-        for (int i = 0; i < this->v_nr; i++) {
-            for (int j = 0; j < this->v_nr; j++) {
-                std::cout << this->_graph[i][j] << " ";
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
+                std::cout << _graph[i][j] << " ";
             }
             std::cout << std::endl;
         }
     }
 
     void load() {
-        gen_graph* gen = new gen_graph(this->v_nr, this->sat);
+        gen_graph* gen = new gen_graph(v_nr, sat);
         bool tmp_bool;
         tmp_bool = gen->euler_generate();
         while (!tmp_bool) {
             delete gen;
             gen = NULL;
-            gen = new gen_graph(this->v_nr, this->sat);
+            gen = new gen_graph(v_nr, sat);
             tmp_bool = gen->euler_generate();
         }
-        for (int i = 0; i < this->v_nr; i++) {
-            for (int j = 0; j < this->v_nr; j++) {
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
                 if (gen->is_edge(i, j)) {
-                    this->add(i, j);
+                    add(i, j);
                 }
             }
         }
-        this->e_nr = gen->get_e_nr();
+        e_nr = gen->get_e_nr();
         delete gen;
         gen = NULL;
     }
 
 
     bool are_adjecent(int a) {
-        for (int i = 0; i < this->v_nr; i++) {
-            if (this->is_edge(a, i)) {
+        for (int i = 0; i < v_nr; i++) {
+            if (is_edge(a, i)) {
                 return true;
             }
         }
@@ -207,8 +207,8 @@ public:
     }
 
     int first_adjecent(int a) {
-        for (int i = 0; i < this->v_nr; i++) {
-            if (this->_graph[a][i] == 1) {
+        for (int i = 0; i < v_nr; i++) {
+            if (_graph[a][i] == 1) {
                 return i;
             }
         }
@@ -216,16 +216,16 @@ public:
     }
 
     bool del_edge(int a, int b) {
-        if (a < 0 || b < 0 || a >= this->v_nr || b >= this->v_nr) {
+        if (a < 0 || b < 0 || a >= v_nr || b >= v_nr) {
             return false;
         }
 
-        if (!this->is_edge(a, b)) {
+        if (!is_edge(a, b)) {
             return false;
         }
 
-        this->_graph[a][b] = 0;
-        this->_graph[b][a] = 0;
+        _graph[a][b] = 0;
+        _graph[b][a] = 0;
         return true;
     }
 
@@ -238,15 +238,15 @@ public:
         util_stack.push(v);
         while (!util_stack.empty()) {
             v = util_stack.top();
-            if (this->are_adjecent(v)) {
-                u = this->first_adjecent(v);
+            if (are_adjecent(v)) {
+                u = first_adjecent(v);
                 util_stack.push(u);
-                this->del_edge(u, v);
+                del_edge(u, v);
                 v = u;
             }
             else {
                 util_stack.pop();
-                this->seq.push_back(v);
+                seq.push_back(v);
             }
         }
         end = clock();
