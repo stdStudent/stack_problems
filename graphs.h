@@ -28,6 +28,22 @@ public:
         }
     }
 
+    gen_graph(int m, int n) {
+        v_nr = m;
+        if (m * (m-1)/2 < n)
+            e_nr = (m * (m-1))/2; // max
+        else
+            e_nr = n;
+
+        _graph = new int * [v_nr];
+        for (int i = 0; i < v_nr; i++) {
+            _graph[i] = new int [v_nr];
+            for (int j = 0; j < v_nr; j++) {
+                _graph[i][j] = 0;
+            }
+        }
+    }
+
     ~gen_graph() {
         if (_graph != nullptr) {
             for (int i = 0; i < v_nr; i++) {
@@ -113,13 +129,36 @@ public:
 class Eulerian_cycle {
     int** _graph;
     int v_nr, e_nr{};
-    float sat;
+    float sat{};
     std::vector<int> seq;
 
 public:
     Eulerian_cycle(int m, float saturation) {
         v_nr = m;
-        sat = saturation;
+
+        if (sat < 0.48)
+            sat = 0.48;
+        else
+            sat = saturation;
+
+        _graph = new int * [v_nr];
+        for (int i = 0; i < v_nr; i++) {
+            _graph[i] = new int [v_nr];
+            for (int j = 0; j < v_nr; j++) {
+                _graph[i][j] = 0;
+            }
+        }
+    }
+
+    Eulerian_cycle(int m, int n) {
+        v_nr = m;
+        if (m * (m-1)/2 < n)
+            e_nr = (m * (m-1))/2; // max
+        else if (n < (int)((m * (m-1))/2) * 0.48)
+            e_nr = static_cast<int>(((m * (m-1))/2) * 0.48);
+        else
+            e_nr = n;
+
         _graph = new int * [v_nr];
         for (int i = 0; i < v_nr; i++) {
             _graph[i] = new int [v_nr];
@@ -167,13 +206,13 @@ public:
     }
 
     void load() {
-        auto* gen = new gen_graph(v_nr, sat);
+        auto* gen = (sat==0) ? new gen_graph(v_nr, e_nr) : new gen_graph(v_nr, sat);
         bool tmp_bool;
         tmp_bool = gen->euler_generate();
 
         while (!tmp_bool) {
             delete gen;
-            gen = new gen_graph(v_nr, sat);
+            gen = (sat==0) ? new gen_graph(v_nr, e_nr) : new gen_graph(v_nr, sat);
             tmp_bool = gen->euler_generate();
         }
 

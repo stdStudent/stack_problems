@@ -183,7 +183,11 @@ void testPars() {
 void testGraphs() {
     srand(time(0));
 
-    Eulerian_cycle e(10, 0.9);
+    Eulerian_cycle e(10,1);
+    e.display();
+
+    cout << endl;
+
     e.load();
     e.display();
 }
