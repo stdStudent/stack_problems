@@ -16,7 +16,7 @@ class gen_graph {
     int v_nr, e_nr;
     int** _graph;
 public:
-    gen_graph(int m, float saturation) {
+    gen_graph(int m, double saturation) {
         v_nr = m;
         e_nr = round(saturation * v_nr * (v_nr - 1) / 2);
         _graph = new int * [v_nr];
@@ -89,6 +89,42 @@ public:
         return true;
     }
 
+    std::vector<std::pair<int, int>> get_eulerian() {
+        int odd_counter = 0;
+        std::vector<std::pair<int, int>> e;
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
+                if (_graph[i][j] == 1) {
+                    odd_counter++;
+                    e.emplace_back(i, j);
+                }
+            }
+            if (odd_counter % 2 != 0 || odd_counter == 0) {
+                e.clear();
+                return e;
+            }
+            odd_counter = 0;
+        }
+        return e;
+    }
+
+    void display() {
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
+                std::cout << _graph[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    void display_eulerian() {
+        std::vector<std::pair<int, int>> v;
+        v = get_eulerian();
+
+        for (std::pair<int, int> i : v) {
+            std::cout << '[' << i.first << ',' << i.second << "] ";
+        }
+    }
 
     bool euler_generate() {
         for (int i = 0; i < v_nr; i++) {
@@ -134,11 +170,11 @@ public:
 class Eulerian_cycle {
     int** _graph;
     int v_nr, e_nr{};
-    float sat{};
+    double sat{};
     std::vector<int> seq;
 
 public:
-    Eulerian_cycle(int m, float saturation) {
+    Eulerian_cycle(int m, double saturation) {
         v_nr = m;
 
         if (sat < 0.48)
@@ -180,6 +216,34 @@ public:
                 delete[] _graph[i];
             }
             delete[] _graph;
+        }
+    }
+
+    std::vector<std::pair<int, int>> get_eulerian() {
+        int odd_counter = 0;
+        std::vector<std::pair<int, int>> e;
+        for (int i = 0; i < v_nr; i++) {
+            for (int j = 0; j < v_nr; j++) {
+                if (_graph[i][j] == 1) {
+                    odd_counter++;
+                    e.emplace_back(i, j);
+                }
+            }
+            if (odd_counter % 2 != 0 || odd_counter == 0) {
+                e.clear();
+                return e;
+            }
+            odd_counter = 0;
+        }
+        return e;
+    }
+
+    void display_eulerian() {
+        std::vector<std::pair<int, int>> v;
+        v = get_eulerian();
+
+        for (std::pair<int, int> i : v) {
+            std::cout << '[' << i.first << ',' << i.second << "] ";
         }
     }
 
